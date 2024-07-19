@@ -1,6 +1,13 @@
+'use client'
+
 import { cn } from "@/lib/utils";
 import { BackgroundGradientAnimation } from "./GradientBg";
 import { GlobeDemo } from "./GridGlobe"
+import { useState } from "react";
+import animationData from "@/data/confetti.json"
+import Lottie from "react-lottie";
+import MagicButton from "./MagicButton";
+import { IoCopyOutline } from "react-icons/io5";
 
 export const BentoGrid = ({
   className,
@@ -41,9 +48,18 @@ export const BentoGridItem = ({
   titleClassName?: string;
   spareImg?: string;
 }) => {
+
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText("alejandrogabiotero@gmail.com");
+
+    setCopied(true);
+  }
+
   return (
     <div className={cn(
-        "row-span-1 relative overflow-hidden rounded-3xl border border-white/[0.1] group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none justify-between flex flex-col space-y-4",
+        "row-span-1 relative overflow-hidden rounded-3xl border border-purple/[0.15] group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none justify-between flex flex-col space-y-4",
         className
       )}
       style={{
@@ -55,9 +71,9 @@ export const BentoGridItem = ({
             <div className="w-full h-full absolute">
                 {img && (
                     <img 
-                     src={img} 
-                     alt={img} 
-                     className={cn(imgClassName, "object-cover object-center")} />
+                      src={img} 
+                      alt={img} 
+                      className={cn(imgClassName, "object-cover object-center")} />
                 )}
 
             </div>
@@ -107,9 +123,31 @@ export const BentoGridItem = ({
                                 {item}
                             </span>
                         ))}
-                        
                     </div>
                 </div>
+            )}
+            
+            {id === 6 && (
+              <div className="mt-5 relative">
+                <div className={`absolute -bottom-5 right-0`}>
+                  <Lottie options={{
+                    loop: copied,
+                    autoplay: copied,
+                    animationData: animationData,
+                    rendererSettings: {
+                      preserveAspectRatio: "xMidYMid slice",
+                    }
+                  }} />
+                </div>
+
+                <MagicButton
+                  title={copied ? "Email Copied" : "Copy my Email"}
+                  icon={<IoCopyOutline />}
+                  position="left"
+                  otherClasses="!bg-[#161a31]"
+                  handleClick={handleCopy}
+                />
+              </div>  
             )}
             </div>
         </div>
